@@ -1,0 +1,23 @@
+{
+  "name": "dripster",
+  "version": "1.0.0",
+  "description": "Mern Dripster",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon backend/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sammie-drew/Dripsterfullstack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sammie-drew/Dripsterfullstack/issues"
+  },
+  "homepage": "https://github.com/Sammie-drew/Dripsterfullstack#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
