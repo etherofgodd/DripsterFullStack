@@ -1,14 +1,20 @@
 import express from "express";
 import dotenv from "dotenv";
+import colors from "colors";
 import products from "./data/products.js";
+import connectDb from "./config/db.js";
 
 const app = express();
 
 dotenv.config();
+connectDb();
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () =>
-  console.warn(`SERVER RUNNING IN ${process.env.NODE_ENV} ON PORT ${PORT}`)
+  console.warn(
+    `SERVER RUNNING IN ${process.env.NODE_ENV} ON PORT ${PORT}`.yellow.bold
+  )
 );
 
 app.get("/", (req, res) => {
