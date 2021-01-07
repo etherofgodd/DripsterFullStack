@@ -1,8 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
 import colors from "colors";
-import products from "./data/products.js";
+
 import connectDb from "./config/db.js";
+import productRoute from "./routes/productRoutes.js";
+
+// middlewares
+import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 const app = express();
 
@@ -16,16 +20,11 @@ app.listen(PORT, () =>
     `SERVER RUNNING IN ${process.env.NODE_ENV} ON PORT ${PORT}`.yellow.bold
   )
 );
+app.use("/api/products", productRoute);
+
+app.use(notFound);
+app.use(errorHandler);
 
 app.get("/", (req, res) => {
   res.json("WELCOME");
-});
-
-app.get("/api/products", (req, res) => {
-  res.status(200).json(products);
-});
-
-app.get("/api/product/:id", (req, res) => {
-  const product = products.find((prod) => prod._id === req.params.id);
-  res.status(200).json(product);
 });

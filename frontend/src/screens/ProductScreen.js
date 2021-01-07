@@ -9,7 +9,7 @@ const ProductScreen = ({ match }) => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const { data } = await axios.get(`/api/product/${match.params.id}`);
+      const { data } = await axios.get(`/api/products/${match.params.id}`);
       setProduct(data);
     };
 
@@ -18,7 +18,9 @@ const ProductScreen = ({ match }) => {
 
   return (
     <>
-      <Link className="btn btn-light my-3">Go Back</Link>
+      <Link to="/" className="btn btn-light my-3">
+        Go Back
+      </Link>
       <Row>
         <Col md={6}>
           <Image src={product.image} alt={product.name} fluid />
