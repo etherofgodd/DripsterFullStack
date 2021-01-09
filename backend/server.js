@@ -4,11 +4,13 @@ import colors from "colors";
 
 import connectDb from "./config/db.js";
 import productRoute from "./routes/productRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 // middlewares
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 const app = express();
+app.use(express.json());
 
 dotenv.config();
 connectDb();
@@ -21,6 +23,7 @@ app.listen(PORT, () =>
   )
 );
 app.use("/api/products", productRoute);
+app.use("/api/users", userRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
