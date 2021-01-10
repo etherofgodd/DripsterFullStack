@@ -37,3 +37,5 @@ const addOrderItems = expressAsyncHandler(async (req, res) => {
 
   res.status(200).json(products);
 });
+
+export { addOrderItems };

@@ -3,8 +3,11 @@ import dotenv from "dotenv";
 import colors from "colors";
 
 import connectDb from "./config/db.js";
+
+// Routes
 import productRoute from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 // middlewares
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
@@ -24,6 +27,7 @@ app.listen(PORT, () =>
 );
 app.use("/api/products", productRoute);
 app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
