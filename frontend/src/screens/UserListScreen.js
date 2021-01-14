@@ -6,19 +6,33 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { listUsers } from "../actions/userAction";
+import { deleteUser, listUsers } from "../actions/userAction";
 
-const UserListScreen = () => {
+const UserListScreen = ({ history }) => {
   const dispatch = useDispatch();
 
   const userList = useSelector((state) => state.userList);
   const { loading, error, users } = userList;
 
-  useEffect(() => {
-    dispatch(listUsers());
-  }, [dispatch]);
+  const login = useSelector((state) => state.login);
+  const { userInfo } = login;
 
-  const deleteHandler = (userId) => {};
+  const userDelete = useSelector((state) => state.userDelete);
+  const { success: successDelete } = userDelete;
+
+  useEffect(() => {
+    if (userInfo && userInfo.isAdmin) {
+      dispatch(listUsers());
+    } else {
+      history.push("/login");
+    }
+  }, [dispatch, history, successDelete, userInfo]);
+
+  const deleteHandler = (userId) => {
+    if (window.confirm("Are you sure")) {
+      dispatch(deleteUser(userId));
+    }
+  };
   return (
     <>
       <h1>Users</h1>
@@ -53,8 +67,8 @@ const UserListScreen = () => {
                   )}
                 </td>
                 <td>
-                  <LinkContainer to={`/user/${user._id}/edit`}>
-                    <Button variant="white" className="btn-sm">
+                  <LinkContainer to={`/admin/user/${user._id}/edit`}>
+                    <Button variant="light" className="btn-sm">
                       <i className="fas fa-edit"></i>
                     </Button>
                   </LinkContainer>
