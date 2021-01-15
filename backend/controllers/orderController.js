@@ -64,7 +64,8 @@ const updateOrdertoPaid = expressAsyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
 
   if (order) {
-    (order.isPaid = true), (order.paidAt = Date.now());
+    order.isPaid = true;
+    order.paidAt = Date.now();
     order.paymentResult = {
       id: req.body.id,
       status: req.body.status,
@@ -92,4 +93,40 @@ const getMyOrders = expressAsyncHandler(async (req, res) => {
   res.json(orders);
 });
 
-export { addOrderItems, getOrderById, updateOrdertoPaid, getMyOrders };
+// @desc GET all Orders
+// @route GET /api/orders
+// @access Private Admin
+
+const getOrders = expressAsyncHandler(async (req, res) => {
+  const orders = await Order.find().populate("user", "name");
+
+  res.json(orders);
+});
+
+// @desc UPDATE Order to Delivered
+// @route POST /api/orders/:id/delivered
+// @access Private Admin
+
+const updateOrdertoDelivered = expressAsyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+
+    const upDatedOrder = await order.save();
+    res.status(200).json(upDatedOrder);
+  } else {
+    res.status(404);
+    throw new Error("Order Not Found");
+  }
+});
+
+export {
+  addOrderItems,
+  getOrderById,
+  updateOrdertoPaid,
+  getMyOrders,
+  getOrders,
+  updateOrdertoDelivered,
+};

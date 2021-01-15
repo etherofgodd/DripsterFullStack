@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import colors from "colors";
 import path from "path";
+import morgan from "morgan";
 import connectDb from "./config/db.js";
 
 // Routes
@@ -13,10 +14,14 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 const app = express();
-app.use(express.json());
 
 dotenv.config();
 connectDb();
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
+app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
