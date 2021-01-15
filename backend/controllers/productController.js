@@ -6,9 +6,25 @@ import Products from "../models/productModel.js";
 // @access Public
 
 const getProducts = expressAsyncHandler(async (req, res) => {
-  const products = await Products.find({}).populate("user", "name email");
+  const pageSize = 15;
+  const page = Number(req.query.pageNumber) || 1;
 
-  res.status(200).json(products);
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : {};
+
+  const count = await Products.countDocuments({ ...keyword });
+  const products = await Products.find({ ...keyword })
+    .populate("user", "name email")
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  res.status(200).json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc GET A Product
@@ -141,6 +157,14 @@ const createProductReview = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// @desc GET TOP RATED PRODUCT
+// @route GET /api/product/top
+// @access PUBLIC
+const getTopProducts = expressAsyncHandler(async (req, res) => {
+  const products = await Products.find({}).sort({ rating: -1 }).limit(3);
+  res.json(products);
+});
+
 export {
   getProducts,
   getSingleProduct,
@@ -148,4 +172,5 @@ export {
   createProduct,
   updateProduct,
   createProductReview,
+  getTopProducts,
 };
